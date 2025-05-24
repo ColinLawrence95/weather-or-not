@@ -1,37 +1,36 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { motion } from "framer-motion";
+import ShowWeather from "./components/ShowWeather/ShowWeather";
+import { SiAccuweather } from "react-icons/si";
+import { TiWeatherSnow } from "react-icons/ti";
+import { TiWeatherStormy } from "react-icons/ti";
+import { TiWeatherDownpour } from "react-icons/ti";
 import "./App.css";
 
 function App() {
-    const [count, setCount] = useState(0);
+    const titleIcons = [TiWeatherDownpour, TiWeatherSnow, TiWeatherStormy, SiAccuweather]
+    const RandomIcon = titleIcons[Math.floor(Math.random() * titleIcons.length)];
+
 
     return (
         <>
-            <div>
-                <a href="https://vite.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img
-                        src={reactLogo}
-                        className="logo react"
-                        alt="React logo"
-                    />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Hello Denison
-            </p>
+            <motion.h1
+                initial={{ opacity: 0, y: -100 }}
+                animate={{ opacity: 1, y: -25 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 5,
+                    bounce: 1,
+                    delay: 2.0,
+                }}
+            >
+                <RandomIcon style={{marginRight: "10px"}}/>
+                Weather or Not
+                <RandomIcon style={{marginLeft: "10px"}}/>
+                
+            </motion.h1>
+
+            <ShowWeather />
         </>
     );
 }
