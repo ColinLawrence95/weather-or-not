@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import "./ShowWeather.css";
 import { FaCity } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
 
 interface WeatherResponse {
     location: {
@@ -18,13 +19,21 @@ interface WeatherResponse {
     };
 }
 
+const image: React.CSSProperties = {
+    maxWidth: "80vw",
+};
+
+const shape: React.CSSProperties = {
+    strokeWidth: 10,
+    strokeLinecap: "round",
+    fill: "transparent",
+};
+
 const ShowWeather: React.FC = () => {
     const [city, setCity] = useState<string>("");
     const [weatherData, setWeatherData] = useState<WeatherResponse | null>(
         null
     );
-    const [error, setError] = useState<string>("");
-
     const fetchWeather = async (cityName: string) => {
         try {
             const response = await axios.get(
@@ -42,14 +51,12 @@ const ShowWeather: React.FC = () => {
                 response.data.current
             ) {
                 setWeatherData(response.data);
-
-                setError("");
             } else {
-                setError("No weather data found.");
+                toast.error("No Weather Data Found")
                 setWeatherData(null);
             }
         } catch (err) {
-            setError("Failed to fetch weather data.");
+            toast.error("Failed to fetch weather data.")
             console.error(err);
             setWeatherData(null);
         }
@@ -57,9 +64,16 @@ const ShowWeather: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (city.trim()) {
-            fetchWeather(city);
+        if (!city.trim()) {
+            toast.warn("Please enter a city!", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            });
+            return;
         }
+        fetchWeather(city);
     };
     const draw = {
         hidden: { pathLength: 0, opacity: 0 },
@@ -122,13 +136,21 @@ const ShowWeather: React.FC = () => {
                         />
                         <FaCity size="4rem" style={{ marginLeft: "10px" }} />
                     </div>
-                    <button id="show-weather-button" type="submit">
+                    <motion.button
+                        id="show-weather-button"
+                        type="submit"
+                        whileTap={{
+                            scale: 0.9,
+                            transition: {
+                                type: "spring",
+                                stiffness: 100,
+                                damping: 10,
+                            },
+                        }}
+                    >
                         How's the Weather?
-                    </button>
+                    </motion.button>
                 </form>
-
-                {error && <div className="error-message">Error: {error}</div>}
-
                 {weatherData && (
                     <motion.div
                         className="show-weather-data"
@@ -153,18 +175,9 @@ const ShowWeather: React.FC = () => {
                     </motion.div>
                 )}
             </motion.div>
+            <ToastContainer />
         </div>
     );
 };
 
 export default ShowWeather;
-
-const image: React.CSSProperties = {
-    maxWidth: "80vw",
-};
-
-const shape: React.CSSProperties = {
-    strokeWidth: 10,
-    strokeLinecap: "round",
-    fill: "transparent",
-};
