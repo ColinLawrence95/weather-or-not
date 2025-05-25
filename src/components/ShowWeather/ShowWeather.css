@@ -63,3 +63,13 @@ border-radius: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
+#show-weather-toggle-api{
+  font-size: 15px;
+  margin-top: 20px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 50px;
+}

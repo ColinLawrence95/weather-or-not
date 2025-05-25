@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import "./ShowWeather.css";
 import { FaCity } from "react-icons/fa";
+import { IoIosNuclear } from "react-icons/io";
 import { ToastContainer, toast } from "react-toastify";
 
 interface WeatherResponse {
@@ -28,22 +29,29 @@ const shape: React.CSSProperties = {
     strokeLinecap: "round",
     fill: "transparent",
 };
+const prodApi = import.meta.env.VITE_BACKEND_API;
+const testApi = import.meta.env.VITE_BACKEND_TEST;
 
 const ShowWeather: React.FC = () => {
     const [city, setCity] = useState<string>("");
     const [weatherData, setWeatherData] = useState<WeatherResponse | null>(
         null
     );
+    const [isTest, setIsTest] = useState<boolean>(true);
+
+    const handleClick = () => {
+        setIsTest((prev) => !prev);
+    };
+
     const fetchWeather = async (cityName: string) => {
+        const whatApi = isTest ? testApi : prodApi;
+
         try {
-            const response = await axios.get(
-                import.meta.env.VITE_BACKEND_TEST,
-                {
-                    params: {
-                        query: cityName,
-                    },
-                }
-            );
+            const response = await axios.get(whatApi, {
+                params: {
+                    query: cityName,
+                },
+            });
 
             if (
                 response.data &&
@@ -52,12 +60,13 @@ const ShowWeather: React.FC = () => {
             ) {
                 setWeatherData(response.data);
             } else {
-                toast.error("No Weather Data Found")
+                toast.error("No Weather Data Found");
                 setWeatherData(null);
             }
         } catch (err) {
-            toast.error("Failed to fetch weather data.")
+            toast.error("Failed to fetch weather data.");
             console.error(err);
+            console.log(whatApi);
             setWeatherData(null);
         }
     };
@@ -124,6 +133,22 @@ const ShowWeather: React.FC = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 2.5 }}
             >
+                <button
+                    id="show-weather-toggle-api"
+                    onClick={handleClick}
+                    style={{
+                        border: `7px solid ${isTest ? "green" : "red"}`,
+                    }}
+                >
+                    {isTest ? (
+                        "TEST API"
+                    ) : (
+                        <>
+                            <IoIosNuclear size={20} /> LIVE API{" "}
+                            <IoIosNuclear size={20} />
+                        </>
+                    )}
+                </button>
                 <form className="show-weather-form" onSubmit={handleSubmit}>
                     <div className="show-weather-input-icons">
                         <FaCity size="4rem" style={{ marginRight: "10px" }} />
@@ -159,16 +184,18 @@ const ShowWeather: React.FC = () => {
                     >
                         <h2 id="show-weather-city-title">
                             {weatherData.location.name}
+                            <img
+                                src={weatherData.current.weather_icons[0]}
+                                alt="Weather icon"
+                                style={{ marginLeft: "10px" }}
+                            />
                         </h2>
-                        <p>Temperature: {weatherData.current.temperature}°C</p>
                         <p>
                             Condition:{" "}
                             {weatherData.current.weather_descriptions[0]}
                         </p>
-                        <img
-                            src={weatherData.current.weather_icons[0]}
-                            alt="Weather icon"
-                        />
+                        <p>Temperature: {weatherData.current.temperature}°C</p>
+
                         <p>Wind Speed: {weatherData.current.wind_speed} km/h</p>
                         <p>Humidity: {weatherData.current.humidity}%</p>
                         <p>Local Time: {weatherData.location.localtime}</p>
