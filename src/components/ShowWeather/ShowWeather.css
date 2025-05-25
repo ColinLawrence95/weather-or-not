@@ -12,7 +12,7 @@ width: 100%;
 }
 #show-weather-city-title{
     font-size: 50px;
-    margin-top: 20px;
+    margin-top: 50px;
 }
 .show-weather-container {
   position: relative;
@@ -50,26 +50,28 @@ border-radius: 20px;
   z-index: 3;
   border-radius: 5px;
 }
+
 .show-weather-form input{
     width: 100%;
 }
 .show-weather-data{
-    font-size: 14px;
+    font-size: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 0;
+    height: 350px;
 }
 .show-weather-input-icons {
     display: flex ;
     align-items: center;
     justify-content: center;
     margin-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 #show-weather-toggle-api{
-  font-size: 15px;
+  font-size: 20px;
   margin-top: 20px;
   z-index: 2;
   display: flex;
@@ -77,4 +79,9 @@ border-radius: 20px;
   align-items: center;
   width: 150px;
   height: 50px;
+}
+.show-weather-form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
