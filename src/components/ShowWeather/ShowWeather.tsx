@@ -179,27 +179,36 @@ const ShowWeather: React.FC = () => {
                 {weatherData && (
                     <motion.div
                         className="show-weather-data"
-                        initial={{ opacity: 0, x: -20}}
-                        animate={{ opacity: 1 , x: 0}}
-                        transition={{ duration: 1.5}}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 1.5 }}
                     >
                         <h2 id="show-weather-city-title">
                             {weatherData.location.name}
-                            <img
+                        </h2>
+                             <img
                                 src={weatherData.current.weather_icons[0]}
                                 alt="Weather icon"
-                                style={{ marginLeft: "10px", borderRadius: "12px"}}
+                                style={{ borderRadius: "12px" }}
                             />
-                        </h2>
-                        <p>
-                            Condition:{" "}
-                            {weatherData.current.weather_descriptions[0]}
-                        </p>
-                        <p> {weatherData.current.temperature}°C</p>
-
-                        <p>Wind Speed: {weatherData.current.wind_speed} km/h</p>
-                        <p>Humidity: {weatherData.current.humidity}%</p>
-                        <p>Local Time: {weatherData.location.localtime}</p>
+                        <div className="show-weather-condition-temp">
+                            <h3 id="show-weather-info-condition">
+                                {weatherData.current.weather_descriptions[0]}
+                            </h3>
+                       
+                            <h3 id="show-weather-info">
+                                {weatherData.current.temperature}°C
+                            </h3>
+                        </div>
+                        <h3 id="show-weather-info">
+                            Wind Speed: {weatherData.current.wind_speed} km/h
+                        </h3>
+                        <h3 id="show-weather-info">
+                            Humidity: {weatherData.current.humidity}%
+                        </h3>
+                        <h3 id="show-weather-info">
+                            Local Time: {weatherData.location.localtime}
+                        </h3>
                     </motion.div>
                 )}
             </motion.div>
